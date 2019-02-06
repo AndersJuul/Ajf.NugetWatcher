@@ -1,8 +1,9 @@
 ﻿using System.Net;
-using System.Threading.Tasks;
 using JCI.ITC.COMP2.Common.Settings;
+using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using Serilog;
 
 namespace Ajf.NugetWatcher
 {
@@ -35,6 +36,8 @@ namespace Ajf.NugetWatcher
             // Sendgrid recommends that the APIKey is stored in Environment Variables on each machine.
             // It's certainly more secure, but this is flexible.
             //var apiKey = Environment.GetEnvironmentVariable("NAME_OF_THE_ENVIRONMENT_VARIABLE_FOR_YOUR_SENDGRID_KEY");
+            Log.Logger.Debug("Preparing mail: " + subject);
+
             var client = new SendGridClient(_mailSenderSettings.SendGridApiKey);
 
             var receiverParts = recieverMailAndName.Split(';');
@@ -42,6 +45,8 @@ namespace Ajf.NugetWatcher
 
             var msg = MailHelper.CreateSingleEmail(_sendGridEmailAddressFactory.CreateSingle(senderMailAndName),
                 receiver, subject, plainTextContent, htmlContent);
+
+            Log.Logger.Debug("Sending mail: " + JsonConvert.SerializeObject(msg));
 
             var response = client.SendEmailAsync(msg).Result;
 
