@@ -1,5 +1,6 @@
 ﻿using Ajf.NugetWatcher.Settings;
 using JCI.ITC.COMP2.Common.Settings;
+using JCI.ITC.Nuget.Logging.Settings;
 using StructureMap;
 
 namespace Ajf.NugetWatcher
@@ -17,6 +18,7 @@ namespace Ajf.NugetWatcher
             });
             For<IMailSenderService>().Use<MailSenderServiceSendGrid>();
             For<IMailSenderSettings>().Use(nugetWatcherSettings);
+            For<ILoggingSettings>().Use(nugetWatcherSettings);
         }
     }
 }

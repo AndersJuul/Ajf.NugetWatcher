@@ -28,7 +28,7 @@ namespace Ajf.NugetWatcher
             _sendGridEmailAddressFactory = sendGridEmailAddressFactory;
         }
 
-        public override async Task<HttpStatusCode> SendMailAsync(string subject, string plainTextContent,
+        public override HttpStatusCode SendMail(string subject, string plainTextContent,
             string htmlContent, string senderMailAndName,
             string recieverMailAndName)
         {
@@ -43,7 +43,7 @@ namespace Ajf.NugetWatcher
             var msg = MailHelper.CreateSingleEmail(_sendGridEmailAddressFactory.CreateSingle(senderMailAndName),
                 receiver, subject, plainTextContent, htmlContent);
 
-            var response = await client.SendEmailAsync(msg);
+            var response = client.SendEmailAsync(msg).Result;
 
             return response.StatusCode;
         }
