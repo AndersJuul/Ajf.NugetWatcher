@@ -14,7 +14,7 @@ namespace Ajf.NugetWatcher
                 .Debug()
                 .CreateLogger();
 
-            Log.Logger.Information("Starting Service");
+            Log.Logger.Information("Starting Service with args: " + string.Join("|",args));
 
             using (var container = ServiceIoC.Initialize())
             {
