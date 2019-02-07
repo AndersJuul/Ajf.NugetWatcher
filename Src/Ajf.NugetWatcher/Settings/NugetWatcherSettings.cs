@@ -24,6 +24,7 @@ namespace Ajf.NugetWatcher.Settings
         public IEnumerable<Uri> EsLoggingUri { get; set; }
         public LogEventLevel LoggingLevel { get; set; }
         public string PathToNuget { get; set; }
+        public string[] NotificationReceivers { get; set; }
         public string SendGridApiKey { get; set; }
     }
 }

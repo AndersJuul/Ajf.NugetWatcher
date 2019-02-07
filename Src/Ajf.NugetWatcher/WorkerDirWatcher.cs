@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using Ajf.NugetWatcher.Settings;
-using JCI.ITC.Nuget.Logging.Settings;
 using JCI.ITC.Nuget.TopShelf;
 using Newtonsoft.Json;
 using Serilog;
@@ -11,14 +10,14 @@ namespace Ajf.NugetWatcher
 {
     public class WorkerDirWatcher : BaseWorker, IDisposable
     {
-        private readonly ILoggingSettings _loggingSettings;
+        private readonly INugetWatcherSettings _nugetWatcherSettings;
         private readonly IMailSenderService _mailSenderService;
         private FileSystemWatcher _fileSystemWatcher;
 
-        public WorkerDirWatcher(IMailSenderService mailSenderService, ILoggingSettings loggingSettings)
+        public WorkerDirWatcher(IMailSenderService mailSenderService, INugetWatcherSettings nugetWatcherSettings)
         {
             _mailSenderService = mailSenderService;
-            _loggingSettings = loggingSettings;
+            _nugetWatcherSettings = nugetWatcherSettings;
         }
 
         public void Dispose()
@@ -83,8 +82,8 @@ namespace Ajf.NugetWatcher
 
                 var httpStatusCode = _mailSenderService
                         .SendMail($"[NugetWatcher]  {latest.Path} {latest.Ts}", "",
-                            $"<b>This was send from {_loggingSettings.SuiteName}.{_loggingSettings.ComponentName}, {_loggingSettings.Environment}, {_loggingSettings.ReleaseNumber}</b>",
-                            "andersjuulsfirma@gmail.com;Anders", new[] { "andersjuulsfirma@gmail.com;Anders" })
+                            $"<b>This was send from {_nugetWatcherSettings.SuiteName}.{_nugetWatcherSettings.ComponentName}, {_nugetWatcherSettings.Environment}, {_nugetWatcherSettings.ReleaseNumber}</b>",
+                            "andersjuulsfirma@gmail.com;Anders",_nugetWatcherSettings.NotificationReceivers )
                     ;
             }
             catch (Exception exception)

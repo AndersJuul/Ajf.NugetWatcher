@@ -7,6 +7,7 @@ namespace Ajf.NugetWatcher.Settings
         public static void Enrich(INugetWatcherSettings nugetWatcherSettings)
         {
             nugetWatcherSettings.PathToNuget = SettingsEnricher.ValueByKeyString("PathToNuget", true);
+            nugetWatcherSettings.NotificationReceivers = SettingsEnricher.ValueByKeyStringArray("NotificationReceivers", true);
         }
     }
 }

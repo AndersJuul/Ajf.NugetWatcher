@@ -6,5 +6,6 @@ namespace Ajf.NugetWatcher.Settings
     public interface INugetWatcherSettings:ILoggingSettings,IMailSenderSettings
     {
         string PathToNuget { get; set; }
+        string[] NotificationReceivers { get; set; }
     }
 }
