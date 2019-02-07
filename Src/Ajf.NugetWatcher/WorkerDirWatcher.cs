@@ -51,31 +51,46 @@ namespace Ajf.NugetWatcher
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            var httpStatusCode = _mailSenderService
-                    .SendMail("[NugetWatcher] Nuget Rename " + JsonConvert.SerializeObject(e), "", "<b>hello</b>",
-                        "andersjuulsfirma@gmail.com;Anders", new[] {"andersjuulsfirma@gmail.com;Anders"})
-                ;
+            try
+            {
+                var httpStatusCode = _mailSenderService
+                        .SendMail("[NugetWatcher] Nuget Rename " + JsonConvert.SerializeObject(e), "", "<b>hello</b>",
+                            "andersjuulsfirma@gmail.com;Anders", new[] { "andersjuulsfirma@gmail.com;Anders" })
+                    ;
+            }
+            catch (Exception exception)
+            {
+                Log.Logger.Error(exception, "During on renamed");
+                throw;
+            }
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            Log.Logger.Information("Change detected: " + JsonConvert.SerializeObject(e));
+            try
+            {
+                Log.Logger.Information("Change detected: " + JsonConvert.SerializeObject(e));
 
-            var path = e.FullPath;
-            var enumerateDirectories = Directory.EnumerateDirectories(path);
+                var path = e.FullPath;
+                var enumerateDirectories = Directory.EnumerateDirectories(path);
 
-            var datedDirs =
-                enumerateDirectories.Select(x => new DatedDir {Path = x, Ts = Directory.GetLastWriteTime(x)})
-                    .OrderByDescending(xx => xx.Ts);
+                var datedDirs =
+                    enumerateDirectories.Select(x => new DatedDir { Path = x, Ts = Directory.GetLastWriteTime(x) })
+                        .OrderByDescending(xx => xx.Ts);
 
-            var latest = datedDirs.FirstOrDefault();
-            if (latest == null) return;
+                var latest = datedDirs.FirstOrDefault();
+                if (latest == null) return;
 
-            var httpStatusCode = _mailSenderService
-                    .SendMail($"[NugetWatcher]  {latest.Path} {latest.Ts}", "",
-                        $"<b>This was send from {_loggingSettings.SuiteName}.{_loggingSettings.ComponentName}, {_loggingSettings.Environment}, {_loggingSettings.ReleaseNumber}</b>",
-                        "andersjuulsfirma@gmail.com;Anders", new[] {"andersjuulsfirma@gmail.com;Anders"})
-                ;
+                var httpStatusCode = _mailSenderService
+                        .SendMail($"[NugetWatcher]  {latest.Path} {latest.Ts}", "",
+                            $"<b>This was send from {_loggingSettings.SuiteName}.{_loggingSettings.ComponentName}, {_loggingSettings.Environment}, {_loggingSettings.ReleaseNumber}</b>",
+                            "andersjuulsfirma@gmail.com;Anders", new[] { "andersjuulsfirma@gmail.com;Anders" })
+                    ;
+            }
+            catch (Exception exception)
+            {
+                Log.Logger.Error(exception,"During on changed");
+            }
         }
 
 
