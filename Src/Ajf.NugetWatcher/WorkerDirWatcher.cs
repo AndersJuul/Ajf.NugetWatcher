@@ -82,7 +82,7 @@ namespace Ajf.NugetWatcher
 
                 var httpStatusCode = _mailSenderService
                         .SendMail($"[NugetWatcher]  {latest.Path} {latest.Ts}", "",
-                            $"<b>This was send from {_nugetWatcherSettings.SuiteName}.{_nugetWatcherSettings.ComponentName}, {_nugetWatcherSettings.Environment}, {_nugetWatcherSettings.ReleaseNumber}</b>",
+                            $"<b>This was send from {_nugetWatcherSettings.SuiteName}.{_nugetWatcherSettings.ComponentName}, {_nugetWatcherSettings.Environment}, {_nugetWatcherSettings.ReleaseNumber} at {DateTime.Now:yyyy-MM-dd HH.mm.ss}</b>",
                             "andersjuulsfirma@gmail.com;Anders",_nugetWatcherSettings.NotificationReceivers )
                     ;
             }
